@@ -1,0 +1,111 @@
+<%- include('../../fragments/header.ejs') %>
+    <main>
+        <script src="/js/validateCommon.js"></script>
+        <script src="/js/validatePricebookForm.js"></script>
+        <h2><%= pageTitle %></h2>
+        <form class="form" novalidate action="<%= formAction %>" method="post">
+            <input type="hidden" name="id" value="<%= pricebook.id %>">
+            <label for="product">Produkt: <span class="symbol-required">*</span></label>
+            <select name="productId" id="product">
+                <% if (!pricebook.product) { %>
+                    <option value="" selected>-- Wybierz produkt --</option>
+                <% } %>
+                <% for (const product of products) { %> 
+                    <option value="<%= product.id %>"
+                        <%= (pricebook?.product && product.id.toString() == pricebook.product.id) ? 'selected' : '' %>>
+                        <%= product.name %></option>
+                <% } %>
+            </select>
+            <span id="errorProduct" class="errors-text"></span>
+
+            <label for="store">Sklep: <span class="symbol-required">*</span></label>
+            <select name="storeId" id="store">
+                <% if (!pricebook.store) { %>
+                    <option value="" selected>-- Wybierz sklep --</option>
+                <% } %>
+                <% for (const store of stores) { %>
+                    <option value="<%= store.id %>"
+                        <%= (pricebook?.store && store.id.toString() == pricebook.store.id) ? 'selected' : '' %>>
+                        <%= store.name %></option>
+                <% } %>
+            </select>
+            <span id="errorStore" class="errors-text"></span>
+
+            <label for="price">Cena: <span class="symbol-required">*</span></label>
+            <input type="number" name="price" id="price" required min="0" value="<%= pricebook.price %>">
+            <span id="errorPrice" class="errors-text"></span>
+
+            <label for="validFrom">Obowiązuje od:</label>
+            <input type="date" name="validFrom" id="validFrom" min="2022-10-09" max="2025-10-10" value="<%= formatDate(pricebook.validFrom) %>">
+            <span id="errorValidFrom" class="errors-text"></span>
+
+            <label for="validTo">Obowiązuje do:</label>
+            <input type="date" name="validTo" id="validTo" min="2022-10-09" max="2025-10-10" value="<%= formatDate(pricebook.validTo) %>">
+            <span id="errorValidTo" class="errors-text"></span>
+
+            <label for="quantity">Ilość: <span class="symbol-required">*</span></label>
+            <input type="number" name="quantity" id="quantity" required min="0" value="<%= pricebook.quantity %>">
+            <span id="errorQuantity" class="errors-text"></span>
+
+            <% if (formMode === 'details') { %>
+                <div class="section-buttons">
+                    <a href="<%= navLocation %>/edit/<%=pricebook.id%>" class="list-actions-button-edit">Edytuj</a>
+                </div>
+            <% } %>
+
+            <div class="form-buttons">
+                <p id="errorsSummary" class="errors-text"></p>
+                <% if (formMode !== 'details') { %>
+                    <input type="submit" value="<%=btnLabel%>" class="form-button-submit">
+                    <a href="<%= navLocation %>" class="form-button-cancel">Anuluj</a>
+                <% } else { %>
+                    <a href="" class="form-button-cancel back-link">Powrót</a>
+                <% } %>
+            </div>
+        </form>
+        <% if (formMode === 'details' || formMode === 'edit') { %>
+            <% if (pricebook.store) { %>
+                <h2>Sklep</h2>
+                <table class="table-list">
+                    <thead>
+                        <tr>
+                            <th>Nazwa</th>
+                            <th>Miejscowość</th>
+                            <th>Ulica</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><a href="/stores/details/<%= pricebook.store.id %>"><%= pricebook.store.name %></a></td>
+                            <td><%= pricebook.store.city %></td>
+                            <td><%= pricebook.store.street %></td>
+                        </tr>
+                    </tbody>
+                </table>
+            <% } %>
+            <% if (pricebook.product) { %>
+                <h2>Produkt</h2>
+                <table class="table-list">
+                    <thead>
+                        <tr>
+                            <th>Nazwa</th>
+                            <th>Opis</th>
+                            <th>Jednostka</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <a href="/products/details/<%= pricebook.product.id %>"><%= pricebook.product.name %></a>
+                            </td>
+                            <td>
+                                <%= pricebook.product.description %>
+                            </td>
+                            <td><%= pricebook.product.unitOfMeasure?.label %></td>
+                        </tr>
+                    </tbody>
+                </table>
+            <% } %>
+        <% } %>
+    </main>
+    <%- include('../../fragments/footer.ejs') %>

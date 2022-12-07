@@ -1,0 +1,32 @@
+<%- include('../../fragments/header.ejs') %>
+    <main>
+        <h2>List książek cenowych</h2>
+        <table class="table-list">
+            <thead>
+                <tr>
+                    <th>Nazwa produktu</th>
+                    <th>Sklep</th>
+                    <th>Cena</th>
+                    <th>Akcje</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% for (let pricebook of pricebooks) { %>
+                    <tr>
+                        <td><%= pricebook.product.name %></td>
+                        <td><%= pricebook.store.name %></td>
+                        <td><%= pricebook.price %> zł</td>
+                        <td>
+                            <ul class="list-actions">
+                                <li><a href="<%= navLocation %>/details/<%=pricebook.id%>" class="list-actions-button-details material-symbols-outlined">info</a></li>
+                                <li><a href="<%= navLocation %>/edit/<%=pricebook.id%>" class="list-actions-button-edit material-symbols-outlined">edit</a></li>
+                                <li><a href="<%= navLocation %>/delete/<%=pricebook.id%>" class="list-actions-button-delete material-symbols-outlined">delete</a></li>
+                            </ul>
+                        </td>
+                    </tr>
+                <% } %>
+            </tbody>
+        </table>
+        <p><a href="<%= navLocation %>/add" class="button-add">Dodaj nową książkę cenową</a></p>
+    </main>
+    <%- include('../../fragments/footer.ejs') %>

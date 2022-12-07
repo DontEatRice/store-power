@@ -1,0 +1,71 @@
+<%- include('../../fragments/header.ejs') %>
+    <script src="/js/validateCommon.js"></script>
+    <!-- <script src="/js/validateStoreForm.js"></script> -->
+    <main>
+        <h2><%= pageTitle %></h2>
+        <form class="form" novalidate method="post" action="<%= formAction %>">
+            <input type="hidden" name="id" value="<%= store.id %>">
+            <label for="name">Nazwa: <span class="symbol-required">*</span></label>
+            <input type="text" name="name" id="name" required maxlength="20" placeholder="Od 3 do 20 znaków" value="<%= store.name %>">
+            <span id="errorName" class="errors-text"></span>
+
+            <label for="city">Miejscowość: <span class="symbol-required">*</span></label>
+            <input type="text" name="city" id="city" required maxlength="40" placeholder="Maks. 40 znaków" value="<%= store.city %>">
+            <span id="errorCity" class="errors-text"></span>
+
+            <label for="street">Ulica i numer/nr. mieszkania: <span class="symbol-required">*</span></label>
+            <input type="text" name="street" id="street" required maxlength="135" value="<%= store.street %>">
+            <span id="errorStreet" class="errors-text"></span>
+
+            <label for="phoneNumber">Numer telefonu:</label>
+            <input type="text" name="phoneNumber" id="phoneNumber" maxlength="9" placeholder="np. 111222333" value="<%= store.phoneNumber %>">
+            <span id="errorPhoneNumber" class="errors-text"></span>
+            
+            <label for="email">Email:</label>
+            <input type="email" name="email" id="email" maxlength="50" placeholder="kowalski@example.org" value="<%= store.email %>">
+            <span id="errorEmail" class="errors-text"></span>
+
+            <% if (formMode === 'details') { %>
+                <div class="section-buttons">
+                    <a href="<%= navLocation %>/edit/<%=store.id%>" class="list-actions-button-edit">Edytuj</a>
+                </div>
+            <% } %>
+
+            <div class="form-buttons">
+                <p id="errorsSummary" class="errors-text"></p>
+                <% if (formMode !== 'details') { %>
+                    <input type="submit" value="<%=btnLabel%>" class="form-button-submit">
+                    <a href="<%= navLocation %>" class="form-button-cancel">Anuluj</a>
+                <% } else { %>
+                    <a href="" class="form-button-cancel back-link">Powrót</a>
+                <% } %>
+            </div>
+        </form>
+
+        <% if ((formMode === 'details' || formMode === 'edit') && store.pricebooks ) { %>
+            <h2>
+                Ceny produktów
+            </h2>
+            <table class="table-list">
+                <thead>
+                    <th>Produkt</th>
+                    <th>Cena</th>
+                    <th>Ilość</th>
+                </thead>
+                <tbody>
+                    <% for (let pricebook of store.pricebooks) { %>
+                        <tr>
+                            <td><a href="/pricebooks/details/<%=pricebook.id%>"><%= pricebook.product.name %></a></td>
+                            <td><%= pricebook.price %> zł</td>
+                            <td><%= pricebook.quantity %></td>
+                        </tr>
+                    <% } %>
+                </tbody>
+            </table>
+        <% } else if (!store.picebooks && formMode !== 'create') { %>
+            <h1>
+                Żaden produkt z ceną nie został dodany jeszcze do tego sklepu!
+            </h1>
+        <% } %>    
+    </main>
+    <%- include('../../fragments/footer.ejs') %>

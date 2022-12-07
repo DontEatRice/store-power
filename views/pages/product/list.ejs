@@ -1,0 +1,42 @@
+<%- include('../../fragments/header.ejs') %>
+    <main>
+        <a href="/units" class="list-actions-button-edit">Lista jednostek</a>
+        <h2>Lista produktów</h2>
+        <table class="table-list">
+            <thead>
+                <tr>
+                    <th>Nazwa</th>
+                    <th>Jednostka miary</th>
+                    <th>Opis</th>
+                    <th>Akcje</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% for (const product of products) { %>
+                    <tr>
+                        <td>
+                            <%= product.name %>
+                        </td>
+                        <td>
+                            <%= product.unitOfMeasure?.label %>
+                        </td>
+                        <td>
+                            <%= product.description %>
+                        </td>
+                        <td>
+                            <ul class="list-actions">
+                                <li><a href="<%= navLocation %>/details/<%=product.id%>"
+                                        class="list-actions-button-details material-symbols-outlined">info</a></li>
+                                <li><a href="<%= navLocation %>/edit/<%=product.id%>"
+                                        class="list-actions-button-edit material-symbols-outlined">edit</a></li>
+                                <li><a href="<%= navLocation %>/delete/<%=product.id%>"
+                                        class="list-actions-button-delete material-symbols-outlined">delete</a></li>
+                            </ul>
+                        </td>
+                    </tr>
+                <% } %>
+            </tbody>
+        </table>
+        <p><a href="<%= navLocation %>/add" class="button-add">Dodaj nowy produkt</a></p>
+    </main>
+    <%- include('../../fragments/footer.ejs') %>

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StorePower - stores and products management</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <script src="/js/utils.js"></script>
+</head>
+<body>
+    <header>
+        <h1>Zarządzanie sklepami i cenami produktów StorePower</h1>
+        <img src="/images/logo-placeholder.png" alt="StorePower logo">
+    </header>
+    <nav>
+        <ul>
+            <li><a href="/" class="<%- navLocation === '/' ? 'active' : '' %>">Strona główna</a></li>
+            <li><a href="/stores" class="<%- navLocation === '/stores' ? 'active' : '' %>">Sklepy</a></li>
+            <li><a href="/pricebooks" class="<%- navLocation === '/pricebooks' ? 'active' : '' %>">Ceny produktów w sklepach</a></li>
+            <li><a href="/products" class="<%- navLocation === '/products' ? 'active' : '' %>">Produkty</a></li>
+        </ul>
+    </nav>

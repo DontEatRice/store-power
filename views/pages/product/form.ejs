@@ -1,0 +1,75 @@
+<%- include('../../fragments/header.ejs') %>
+    <main>
+        <script src="/js/validateCommon.js"></script>
+        <script src="/js/validateProductForm.js"></script>
+        <h2><%= pageTitle %></h2>
+        <form class="form" novalidate action="<%= formAction %>" method="post">
+            <input type="hidden" name="id" value="<%= product.id %>">
+            <label for="name">Nazwa: <span class="symbol-required">*</span></label>
+            <input type="text" name="name" id="name" required maxlength="20" placeholder="Od 3 do 20 znaków" value="<%= product.name %>">
+            <span id="errorName" class="errors-text"></span>
+
+            <label for="description">Opis:</label>
+            <textarea name="description" id="description" rows="5" cols="40" ><%= product.description %></textarea>
+            <span id="errorDescription" class="errors-text"></span>
+
+            <label for="imageLink">Link do obrazka: <span class="symbol-required">*</span></label>
+            <input type="text" name="imageLink" id="imageLink" required placeholder="np. https://example.com/image.png" value="<%= product.imageLink %>">
+            <span id="errorImageLink" class="errors-text"></span>
+
+            <label for="unitOfMeasure">Jednostka miary: <span class="symbol-required">*</span></label>
+            <select name="unitOfMeasureId" id="unitOfMeasure">
+                <% if (!product.unitOfMeasure) { %>
+                    <option value="" selected>-- Wybierz jednostkę --</option>
+                <% } %>
+                <% for (const unit of units) { %> 
+                    <option value="<%= unit.id %>"
+                        <%= (product.unitOfMeasure && unit.id.toString() == product.unitOfMeasure.id) ? 'selected' : '' %>>
+                        <%= unit.name %></option>
+                <% } %>
+            </select>
+            <span id="errorUnitOfMeasure" class="errors-text"></span>
+
+            <% if (formMode === 'details') { %>
+                <div class="section-buttons">
+                    <a href="<%= navLocation %>/edit/<%=product.id%>" class="list-actions-button-edit">Edytuj</a>
+                </div>
+            <% } %>
+
+            <div class="form-buttons">
+                <p id="errorsSummary" class="errors-text"></p>
+                <% if (formMode !== 'details') { %>
+                    <input type="submit" value="<%=btnLabel%>" class="form-button-submit">
+                    <a href="<%= navLocation %>" class="form-button-cancel">Anuluj</a>
+                <% } else { %>
+                    <a href="" class="form-button-cancel back-link">Powrót</a>
+                <% } %>
+            </div>
+        </form>
+        <% if ((formMode === 'details' || formMode === 'edit') && product.pricebooks.length > 0) { %>
+            <h2>
+                Sklepy w których znajduje się produkt
+            </h2>
+            <table class="table-list">
+                <thead>
+                    <th>Produkt</th>
+                    <th>Cena</th>
+                    <th>Ilość</th>
+                </thead>
+                <tbody>
+                    <% for (let pricebook of product.pricebooks) { %>
+                        <tr>
+                            <td><a href="/pricebooks/details/<%=pricebook.id%>"><%= pricebook.store.name %></a></td>
+                            <td><%= pricebook.price %> zł</td>
+                            <td><%= pricebook.quantity %></td>
+                        </tr>
+                    <% } %>
+                </tbody>
+            </table>
+        <% } else if (formMode !== 'create') { %>
+            <h1>
+                Ten produkt nie został jeszcze dodany do żadnego sklepu!
+            </h1>
+        <% } %>
+    </main>
+    <%- include('../../fragments/footer.ejs') %>

@@ -1,0 +1,32 @@
+<%- include('../../fragments/header.ejs') %>
+<script src="/js/validateCommon.js"></script>
+<script src="/js/validateUnitForm.js"></script>
+<main>
+    <h2><%= pageTitle %></h2>
+    <form action="<%= formAction %>" class="form" method="post" novalidate>
+        <input type="hidden" name="id" value="<%= unit.id %>">
+        <label for="name">Skrót: <span class="symbol-required">*</span></label>
+        <input type="text" name="name" id="name" required maxlength="3" placeholder="Od 1 do 3 znaków" value="<%= unit.name %>">
+        <span id="errorName" class="errors-text"></span>
+
+        <label for="label">Etykieta: <span class="symbol-required">*</span></label>
+        <input type="text" name="label" id="label" required maxlength="20" placeholder="Maks. 20 znaków" value="<%= unit.label %>">
+        <span id="errorLabel" class="errors-text"></span>
+        <% if (formMode === 'details') { %>
+            <div class="section-buttons">
+                <a href="<%= navLocation %>/edit/<%=unit.id%>" class="list-actions-button-edit">Edytuj</a>
+            </div>
+        <% } %>
+
+        <div class="form-buttons">
+            <p id="errorsSummary" class="errors-text"></p>
+            <% if (formMode !== 'details') { %>
+                <input type="submit" value="<%=btnLabel%>" class="form-button-submit">
+                <a href="<%= navLocation %>" class="form-button-cancel">Anuluj</a>
+            <% } else { %>
+                <a href="" class="form-button-cancel back-link">Powrót</a>
+            <% } %>
+        </div>
+    </form>
+</main>
+<%- include('../../fragments/footer.ejs') %>

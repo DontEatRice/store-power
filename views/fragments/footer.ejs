@@ -1,0 +1,22 @@
+<footer>
+    Jakub Sikorski s22518
+</footer>
+<% if (typeof formMode !== 'undefined') { %>
+    <script>
+        const formMode = '<%=formMode%>';
+        const inputs = document.querySelectorAll('.form input:not(.form-button-submit), .form select, .form textarea')
+        if (inputs) {
+            inputs.forEach(input => {
+                input.disabled = formMode === 'details';
+            })
+        }
+    </script>
+<% } %>
+<script>
+    document.querySelectorAll('a.back-link')
+        .forEach(link => {
+            link.setAttribute('href', document.referrer)
+        })
+</script>
+</body>
+</html>
