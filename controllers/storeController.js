@@ -1,5 +1,7 @@
 import { ValidationError } from "sequelize"
 import StoreRepository from "../repository/sequalize/StoreRepository.js"
+import { showNotFoundPage } from "./notFoundController.js"
+import { mapValidationErrorsByName } from "./utils.js"
 const viewDir = 'pages/store/'
 
 /**
@@ -33,6 +35,13 @@ export const showEditStoreForm = (req, res) => {
     const storeId = req.params.storeId
     StoreRepository.getById(storeId)
         .then(store => {
+            if (!store) {
+                return showNotFoundPage({
+                    res,
+                    linkBack: res.locals.navLocation,
+                    msg: 'Taki sklep nie istnieje!'
+                })
+            }
             res.render(viewDir + 'form', {
                 store,
                 pageTitle: 'Edycja sklepu',
@@ -41,12 +50,20 @@ export const showEditStoreForm = (req, res) => {
                 formAction: `${res.locals.navLocation}/edit`
             })
         })
+        .catch(err => next(err))
 }
  
 export const showStoreDetails = (req, res, next) => {
     const storeId = req.params.storeId
     StoreRepository.getById(storeId)
         .then(store => {
+            if (!store) {
+                return showNotFoundPage({
+                    res,
+                    linkBack: res.locals.navLocation,
+                    msg: 'Taki sklep nie istnieje!'
+                })
+            }
             res.render(viewDir + 'form', {
                 store,
                 pageTitle: 'Szczegóły sklepu',
@@ -55,6 +72,7 @@ export const showStoreDetails = (req, res, next) => {
                 formAction: ''
             })
         })
+        .catch(err => next(err))
 }
 
 export const addStore = (req, res, next) => {
@@ -64,8 +82,16 @@ export const addStore = (req, res, next) => {
             res.redirect(`${res.locals.navLocation}/details/${result.id}`)
         })
         .catch(err => {
-            console.log(err instanceof ValidationError)
-            console.log(err)
+            if (err instanceof ValidationError) {
+                return res.render(viewDir + 'form', {
+                    store: data,
+                    pageTitle: 'Dodawanie sklepu',
+                    formMode: 'create',
+                    formAction: `${res.locals.navLocation}/add`,
+                    validationErrors: mapValidationErrorsByName(err.errors),
+                    btnLabel: 'Dodaj sklep'
+                })
+            }
             next(err)
         })
 }
@@ -77,6 +103,7 @@ export const updateStore = (req, res, next) => {
         .then(_ => {
             res.redirect(`${res.locals.navLocation}/details/${storeId}`)
         })
+        .catch(err => next(err))
 }
 
 export const deleteStore = (req, res, next) => {

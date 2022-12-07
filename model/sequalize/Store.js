@@ -10,7 +10,12 @@ const Store = sequalize.define('Stores', {
     },
     name: {
         type: DataTypes.STRING(20),
-        allowNull: false
+        allowNull: false,
+        validate: {
+            notEmpty: {
+                msg: 'Pole nie powinno być puste!'
+            }
+        }
     },
     city: {
         type: DataTypes.STRING(25),

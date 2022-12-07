@@ -7,23 +7,33 @@
             <input type="hidden" name="id" value="<%= store.id %>">
             <label for="name">Nazwa: <span class="symbol-required">*</span></label>
             <input type="text" name="name" id="name" required maxlength="20" placeholder="Od 3 do 20 znaków" value="<%= store.name %>">
-            <span id="errorName" class="errors-text"></span>
+            <span id="errorName" class="errors-text">
+                <%= validationErrors.has('name') ? validationErrors.get('name').message : '' %>
+            </span>
 
             <label for="city">Miejscowość: <span class="symbol-required">*</span></label>
             <input type="text" name="city" id="city" required maxlength="40" placeholder="Maks. 40 znaków" value="<%= store.city %>">
-            <span id="errorCity" class="errors-text"></span>
+            <span id="errorCity" class="errors-text">
+                <%= validationErrors.has('city') ? validationErrors.get('city').message : '' %>
+            </span>
 
             <label for="street">Ulica i numer/nr. mieszkania: <span class="symbol-required">*</span></label>
             <input type="text" name="street" id="street" required maxlength="135" value="<%= store.street %>">
-            <span id="errorStreet" class="errors-text"></span>
+            <span id="errorStreet" class="errors-text">
+                <%= validationErrors.has('street') ? validationErrors.get('street').message : '' %>
+            </span>
 
             <label for="phoneNumber">Numer telefonu:</label>
             <input type="text" name="phoneNumber" id="phoneNumber" maxlength="9" placeholder="np. 111222333" value="<%= store.phoneNumber %>">
-            <span id="errorPhoneNumber" class="errors-text"></span>
+            <span id="errorPhoneNumber" class="errors-text">
+                <%= validationErrors.has('phoneNumber') ? validationErrors.get('phoneNumber').message : '' %>
+            </span>
             
             <label for="email">Email:</label>
             <input type="email" name="email" id="email" maxlength="50" placeholder="kowalski@example.org" value="<%= store.email %>">
-            <span id="errorEmail" class="errors-text"></span>
+            <span id="errorEmail" class="errors-text">
+                <%= validationErrors.has('email') ? validationErrors.get('email').message : '' %>
+            </span>
 
             <% if (formMode === 'details') { %>
                 <div class="section-buttons">

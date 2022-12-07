@@ -31,6 +31,7 @@ app.use(express.static(join(__dirname, 'public')));
 
 app.use((req, res, next) => {
   const paths = req.path.split('/')
+  res.locals.validationErrors = new Map()
   res.locals.navLocation = '/' + paths[1]
   /**
    * @param {string | Date | undefined} date 
