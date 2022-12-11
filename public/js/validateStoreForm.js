@@ -78,7 +78,7 @@ function validateForm(event) {
         errorPhoneNumber.textContent = 'Nieprawidłowy numer telefonu'
     }
 
-    if (!checkEmail(emailInput.value)) {
+    if (emailInput.value && !checkEmail(emailInput.value)) {
         valid = false
         emailInput.classList.add('error-input')
         errorEmail.textContent = 'Nieprawidłowy adres e-mail'

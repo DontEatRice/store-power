@@ -1,36 +1,46 @@
 <%- include('../../fragments/header.ejs') %>
     <script src="/js/validateCommon.js"></script>
-    <!-- <script src="/js/validateStoreForm.js"></script> -->
+    <script src="/js/validateStoreForm.js"></script>
     <main>
         <h2><%= pageTitle %></h2>
         <form class="form" novalidate method="post" action="<%= formAction %>">
             <input type="hidden" name="id" value="<%= store.id %>">
             <label for="name">Nazwa: <span class="symbol-required">*</span></label>
-            <input type="text" name="name" id="name" required maxlength="20" placeholder="Od 3 do 20 znaków" value="<%= store.name %>">
+            <input type="text" name="name" id="name" required maxlength="20" placeholder="Od 3 do 20 znaków" value="<%= store.name %>"
+            class="<%= validationErrors.has('name') ? 'error-input' : '' %>"
+            >
             <span id="errorName" class="errors-text">
                 <%= validationErrors.has('name') ? validationErrors.get('name').message : '' %>
             </span>
 
             <label for="city">Miejscowość: <span class="symbol-required">*</span></label>
-            <input type="text" name="city" id="city" required maxlength="40" placeholder="Maks. 40 znaków" value="<%= store.city %>">
+            <input type="text" name="city" id="city" required maxlength="40" placeholder="Maks. 40 znaków" value="<%= store.city %>"
+            class="<%= validationErrors.has('city') ? 'error-input' : '' %>"
+            >
             <span id="errorCity" class="errors-text">
                 <%= validationErrors.has('city') ? validationErrors.get('city').message : '' %>
             </span>
 
             <label for="street">Ulica i numer/nr. mieszkania: <span class="symbol-required">*</span></label>
-            <input type="text" name="street" id="street" required maxlength="135" value="<%= store.street %>">
+            <input type="text" name="street" id="street" required maxlength="135" value="<%= store.street %>"
+             class="<%= validationErrors.has('street') ? 'error-input' : '' %>"
+            >
             <span id="errorStreet" class="errors-text">
                 <%= validationErrors.has('street') ? validationErrors.get('street').message : '' %>
             </span>
 
             <label for="phoneNumber">Numer telefonu:</label>
-            <input type="text" name="phoneNumber" id="phoneNumber" maxlength="9" placeholder="np. 111222333" value="<%= store.phoneNumber %>">
+            <input type="text" name="phoneNumber" id="phoneNumber" maxlength="9" placeholder="np. 111222333" value="<%= store.phoneNumber %>"
+            class="<%= validationErrors.has('phoneNumber') ? 'error-input' : '' %>"
+            >
             <span id="errorPhoneNumber" class="errors-text">
                 <%= validationErrors.has('phoneNumber') ? validationErrors.get('phoneNumber').message : '' %>
             </span>
             
             <label for="email">Email:</label>
-            <input type="email" name="email" id="email" maxlength="50" placeholder="kowalski@example.org" value="<%= store.email %>">
+            <input type="email" name="email" id="email" maxlength="50" placeholder="kowalski@example.org" value="<%= store.email %>"
+            class="<%= validationErrors.has('email') ? 'error-input' : '' %>"
+            >
             <span id="errorEmail" class="errors-text">
                 <%= validationErrors.has('email') ? validationErrors.get('email').message : '' %>
             </span>
@@ -42,7 +52,7 @@
             <% } %>
 
             <div class="form-buttons">
-                <p id="errorsSummary" class="errors-text"></p>
+                <p id="errorsSummary" class="errors-text"><%- validationErrors.size > 0 ? 'Formularz zawiera błędy' : '' %></p>
                 <% if (formMode !== 'details') { %>
                     <input type="submit" value="<%=btnLabel%>" class="form-button-submit">
                     <a href="<%= navLocation %>" class="form-button-cancel">Anuluj</a>
@@ -52,7 +62,7 @@
             </div>
         </form>
 
-        <% if ((formMode === 'details' || formMode === 'edit') && store.pricebooks ) { %>
+        <% if (formMode === 'details' && store.pricebooks ) { %>
             <h2>
                 Ceny produktów
             </h2>
@@ -72,7 +82,7 @@
                     <% } %>
                 </tbody>
             </table>
-        <% } else if (!store.picebooks && formMode !== 'create') { %>
+        <% } else if (!store.picebooks && formMode === 'details') { %>
             <h1>
                 Żaden produkt z ceną nie został dodany jeszcze do tego sklepu!
             </h1>

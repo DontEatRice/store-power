@@ -1,6 +1,11 @@
 import { DataTypes } from "sequelize";
 import sequalize from "../../config/sequalize/sequalize.js";
 
+const NOT_NULL_MESSAGE = 'Pole nie powinno być puste!'
+const TEXT_RANGE_ERR_MESSAGE = (min, max) => {
+    return `Pole powinno zawierać od ${min} do ${max} znaków`
+}
+
 const Store = sequalize.define('Stores', {
     id: {
         type: DataTypes.INTEGER,
@@ -11,9 +16,16 @@ const Store = sequalize.define('Stores', {
     name: {
         type: DataTypes.STRING(20),
         allowNull: false,
+        unique: {
+            msg: 'Sklep z taką nazwą już istnieje!'
+        },
         validate: {
-            notEmpty: {
-                msg: 'Pole nie powinno być puste!'
+            notNull: {
+                msg: NOT_NULL_MESSAGE
+            },
+            len: {
+                args: [3, 20],
+                msg: TEXT_RANGE_ERR_MESSAGE(3, 20)
             }
         }
     },
@@ -23,10 +35,10 @@ const Store = sequalize.define('Stores', {
         validate: {
             len: {
                 args: [0, 25],
-                msg: 'Długość powinna wynosić maksymalnie 25 znaków!'
+                msg: 'Pole powinno zawierać maksymalnie 25 znaków!'
             },
-            notEmpty: {
-                msg: 'Pole nie powinno być puste!',
+            notNull: {
+                msg: NOT_NULL_MESSAGE,
             }
         }
     },
@@ -36,10 +48,10 @@ const Store = sequalize.define('Stores', {
         validate: {
             len: {
                 args: [1, 150],
-                msg: 'Długość powinna wynosić maksymalnie 150 znaków!'
+                msg: 'Pole powinno zawierać maksymalnie 150 znaków!'
             },
             notNull: {
-                msg: 'Pole nie powinno być puste!'
+                msg: NOT_NULL_MESSAGE
             }
         }
     },
@@ -50,7 +62,7 @@ const Store = sequalize.define('Stores', {
              * @param {string | null} value 
              */
             isCorrectPhoneNumber(value) {
-                if (value !== null && !/\d{9}/gm.test(value))
+                if (value && !/\d{9}/gm.test(value))
                     throw new Error('Nieprawidłowy format numeru telefonu!')
             }
         }
@@ -60,6 +72,10 @@ const Store = sequalize.define('Stores', {
         validate: {
             isEmail: {
                 msg: 'Podany adres e-mail nie jest prawidłowy.'
+            },
+            len: {
+                args: [0, 50],
+                msg: 'Pole powinno zawierać maksymalnie 50 znaków!'
             }
         }
     }

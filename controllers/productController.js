@@ -1,8 +1,15 @@
+import { ValidationError } from "sequelize"
 import UnitOfMeasure from "../model/sequalize/UnitOfMeasure.js"
 import ProductRepository from "../repository/sequalize/ProductRepository.js"
 import UnitOfMeasureRepository from "../repository/sequalize/UnitOfMeasureRepository.js"
+import { showNotFoundPage } from "./notFoundController.js"
+import { mapValidationErrorsByName } from "./utils.js"
 
 const viewDir = 'pages/product/'
+
+const isEmpty = obj => {
+    return Object.keys(obj).length === 0
+}
 
 export const showProductList = (req, res, next) => {
     ProductRepository.getAll({
@@ -19,12 +26,12 @@ export const showProductList = (req, res, next) => {
         })
 }
 
-export const showAddProductForm = (req, res, next) => {
+export const showAddProductForm = (req, res, next, product = {}) => {
     UnitOfMeasureRepository.getAll()
         .then(units => {
             res.render(viewDir + 'form', {
                 units,
-                product: {},
+                product,
                 pageTitle: 'Nowy produkt',
                 formMode: 'create',
                 btnLabel: 'Dodaj produkt',
@@ -34,16 +41,16 @@ export const showAddProductForm = (req, res, next) => {
         .catch(err => next(err))
 }
 
-export const showEditProductForm = async (req, res, next) => {
+export const showEditProductForm = async (req, res, next, product = {}) => {
     try {
         const productId = req.params.productId
-        const result = await Promise.all([
-            ProductRepository.getById(productId),
-            UnitOfMeasureRepository.getAll()
-        ])
+        const units = await UnitOfMeasureRepository.getAll()
+        if (isEmpty(product)) {
+            product = await ProductRepository.getById(productId)
+        }
         res.render(viewDir + 'form', {
-            product: result[0],
-            units: result[1],
+            product,
+            units,
             pageTitle: 'Edycja produktu',
             formMode: 'edit',
             btnLabel: 'Edytuj produkt',
@@ -63,6 +70,13 @@ export const showProductDetails = async (req, res, next) => {
                 attributes: ['id', 'name']
             })
         ])
+        if (!result[0]) {
+            return showNotFoundPage({
+                res,
+                linkBack: res.locals.navLocation,
+                msg: 'Taki produkt nie istnieje!'
+            })
+        }
         res.render(viewDir + '/form', {
             product: result[0],
             pageTitle: 'Szczegóły produktu',
@@ -82,6 +96,13 @@ export const addProduct = (req, res, next) => {
         .then(result => {
             res.redirect(`${res.locals.navLocation}/details/${result.id}`)
         })
+        .catch(err => {
+            if (err instanceof ValidationError) {
+                res.locals.validationErrors = mapValidationErrorsByName(err.errors)
+                return showAddProductForm(req, res, next, data)
+            }
+            next(err)
+        })
 }
 
 export const updateProduct = (req, res, next) => {
@@ -90,6 +111,14 @@ export const updateProduct = (req, res, next) => {
     ProductRepository.update(productId, data)
         .then(_ => {
             res.redirect(`${res.locals.navLocation}/details/${productId}`)
+        })
+        .catch(err => {
+            if (err instanceof ValidationError) {
+                res.locals.validationErrors = mapValidationErrorsByName(err.errors)
+                data.id = productId
+                return showEditProductForm(req, res, next, data)
+            }
+            next(err)
         })
 }
 

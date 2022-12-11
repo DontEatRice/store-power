@@ -6,46 +6,70 @@
         <form class="form" novalidate action="<%= formAction %>" method="post">
             <input type="hidden" name="id" value="<%= pricebook.id %>">
             <label for="product">Produkt: <span class="symbol-required">*</span></label>
-            <select name="productId" id="product">
+            <select name="productId" id="product"
+            class="<%= validationErrors.has('productId') ? 'error-input' : '' %>"
+            >
                 <% if (!pricebook.product) { %>
                     <option value="" selected>-- Wybierz produkt --</option>
                 <% } %>
                 <% for (const product of products) { %> 
                     <option value="<%= product.id %>"
-                        <%= (pricebook?.product && product.id.toString() == pricebook.product.id) ? 'selected' : '' %>>
+                        <%= (pricebook.productId && product.id.toString() == pricebook.productId) ? 'selected' : '' %>>
                         <%= product.name %></option>
                 <% } %>
             </select>
-            <span id="errorProduct" class="errors-text"></span>
+            <span id="errorProduct" class="errors-text">
+                <%= validationErrors.has('productId') ? validationErrors.get('productId').message : '' %>
+            </span>
 
             <label for="store">Sklep: <span class="symbol-required">*</span></label>
-            <select name="storeId" id="store">
+            <select name="storeId" id="store"
+            class="<%= validationErrors.has('storeId') ? 'error-input' : '' %>"
+            >
                 <% if (!pricebook.store) { %>
                     <option value="" selected>-- Wybierz sklep --</option>
                 <% } %>
                 <% for (const store of stores) { %>
                     <option value="<%= store.id %>"
-                        <%= (pricebook?.store && store.id.toString() == pricebook.store.id) ? 'selected' : '' %>>
+                        <%= (pricebook.storeId && store.id.toString() == pricebook.storeId) ? 'selected' : '' %>>
                         <%= store.name %></option>
                 <% } %>
             </select>
-            <span id="errorStore" class="errors-text"></span>
+            <span id="errorStore" class="errors-text">
+                <%= validationErrors.has('storeId') ? validationErrors.get('storeId').message : '' %>
+            </span>
 
             <label for="price">Cena: <span class="symbol-required">*</span></label>
-            <input type="number" name="price" id="price" required min="0" value="<%= pricebook.price %>">
-            <span id="errorPrice" class="errors-text"></span>
+            <input type="number" name="price" id="price" required min="0" value="<%= pricebook.price %>"
+            class="<%= validationErrors.has('price') ? 'error-input' : '' %>"
+            >
+            <span id="errorPrice" class="errors-text">
+                <%= validationErrors.has('price') ? validationErrors.get('price').message : '' %>
+            </span>
 
             <label for="validFrom">Obowiązuje od:</label>
-            <input type="date" name="validFrom" id="validFrom" min="2022-10-09" max="2025-10-10" value="<%= formatDate(pricebook.validFrom) %>">
-            <span id="errorValidFrom" class="errors-text"></span>
+            <input type="date" name="validFrom" id="validFrom" min="2022-10-09" max="2025-10-10" value="<%= formatDate(pricebook.validFrom) %>"
+            class="<%= validationErrors.has('validFrom') ? 'error-input' : '' %>"
+            >
+            <span id="errorValidFrom" class="errors-text">
+                <%= validationErrors.has('validFrom') ? validationErrors.get('validFrom').message : '' %>
+            </span>
 
             <label for="validTo">Obowiązuje do:</label>
-            <input type="date" name="validTo" id="validTo" min="2022-10-09" max="2025-10-10" value="<%= formatDate(pricebook.validTo) %>">
-            <span id="errorValidTo" class="errors-text"></span>
+            <input type="date" name="validTo" id="validTo" min="2022-10-09" max="2025-10-10" value="<%= formatDate(pricebook.validTo) %>"
+            class="<%= validationErrors.has('validFrom') ? 'error-input' : '' %>"
+            >
+            <span id="errorValidTo" class="errors-text">
+                <%= validationErrors.has('validTo') ? validationErrors.get('validTo').message : '' %>
+            </span>
 
             <label for="quantity">Ilość: <span class="symbol-required">*</span></label>
-            <input type="number" name="quantity" id="quantity" required min="0" value="<%= pricebook.quantity %>">
-            <span id="errorQuantity" class="errors-text"></span>
+            <input type="number" name="quantity" id="quantity" required min="0" value="<%= pricebook.quantity %>"
+            class="<%= validationErrors.has('quantity') ? 'error-input' : '' %>"
+            >
+            <span id="errorQuantity" class="errors-text">
+                <%= validationErrors.has('quantity') ? validationErrors.get('quantity').message : '' %>
+            </span>
 
             <% if (formMode === 'details') { %>
                 <div class="section-buttons">
@@ -54,7 +78,7 @@
             <% } %>
 
             <div class="form-buttons">
-                <p id="errorsSummary" class="errors-text"></p>
+                <p id="errorsSummary" class="errors-text"><%- validationErrors.size > 0 ? 'Formularz zawiera błędy' : '' %></p>
                 <% if (formMode !== 'details') { %>
                     <input type="submit" value="<%=btnLabel%>" class="form-button-submit">
                     <a href="<%= navLocation %>" class="form-button-cancel">Anuluj</a>
@@ -63,7 +87,7 @@
                 <% } %>
             </div>
         </form>
-        <% if (formMode === 'details' || formMode === 'edit') { %>
+        <% if (formMode === 'details') { %>
             <% if (pricebook.store) { %>
                 <h2>Sklep</h2>
                 <table class="table-list">

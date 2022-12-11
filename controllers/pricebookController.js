@@ -3,10 +3,18 @@ import ProductRepository from "../repository/sequalize/ProductRepository.js"
 import PricebookRepository from "../repository/sequalize/PricebookRepository.js"
 import Product from "../model/sequalize/Product.js"
 import Store from "../model/sequalize/Store.js"
-import UnitOfMeasureRepository from "../repository/sequalize/UnitOfMeasureRepository.js"
-import UnitOfMeasure from "../model/sequalize/UnitOfMeasure.js"
+import { ValidationError } from "sequelize"
+import { mapValidationErrorsByName } from "./utils.js"
+import { showNotFoundPage } from "./notFoundController.js"
 
 const viewDir = 'pages/pricebook'
+
+/**
+ * @param {object} obj 
+ */
+const isEmpty = obj => {
+    return Object.keys(obj).length === 0
+}
 
 export const showPricebookList = (req, res, next) => {
     PricebookRepository.getAll({
@@ -30,7 +38,7 @@ export const showPricebookList = (req, res, next) => {
         })
 }
 
-export const showAddPricebookForm = async (req, res, next) => {
+export const showAddPricebookForm = async (req, res, next, pricebook = {}) => {
     try {
         const results = await Promise.all([
             StoreRepository.getAll({
@@ -41,7 +49,7 @@ export const showAddPricebookForm = async (req, res, next) => {
             })
         ])
         res.render(viewDir + '/form', {
-            pricebook: {},
+            pricebook,
             formMode: 'create',
             stores: results[0],
             products: results[1],
@@ -55,11 +63,10 @@ export const showAddPricebookForm = async (req, res, next) => {
     }
 }
 
-export const showEditPricebookForm = async (req, res, next) => {
+export const showEditPricebookForm = async (req, res, next, pricebook = {}) => {
     try {
         const pricebookId = req.params.pricebookId
         const results = await Promise.all([
-            PricebookRepository.getById(pricebookId),
             StoreRepository.getAll({
                 attributes: ['id', 'name']
             }),
@@ -67,14 +74,24 @@ export const showEditPricebookForm = async (req, res, next) => {
                 attributes: ['id', 'name'],
             }),
         ])
+        if (isEmpty(pricebook)) {
+            pricebook = await PricebookRepository.getById(pricebookId)
+            if (!pricebook) {
+                return showNotFoundPage({
+                    res,
+                    linkBack: res.locals.navLocation,
+                    msg: 'Nie ma takiego wpisu!'
+                })
+            }
+        }
         res.render(viewDir + '/form', {
-            pricebook: results[0],
+            pricebook,
             formMode: 'edit',
             formAction: `${res.locals.navLocation}/edit`,
             btnLabel: 'Edytuj',
             pageTitle: 'Edytuj cenę',
-            stores: results[1],
-            products: results[2]
+            stores: results[0],
+            products: results[1]
         })
     } catch (err) {
         err.statusCode = 500
@@ -86,6 +103,13 @@ export const showPricebookDetails = (req, res, next) => {
     const pricebookId = req.params.pricebookId
     PricebookRepository.getById(pricebookId)
         .then(pricebook => {
+            if (!pricebook) {
+                return showNotFoundPage({
+                    res,
+                    linkBack: res.locals.navLocation,
+                    msg: 'Nie ma takiego wpisu!'
+                })
+            }
             res.render(viewDir + '/form', {
                 pricebook,
                 formMode: 'details',
@@ -98,20 +122,35 @@ export const showPricebookDetails = (req, res, next) => {
         })
 }
 
-export const addPricebook = (req, res) => {
+export const addPricebook = (req, res, next) => {
     const data = {...req.body};
     PricebookRepository.create(data)
         .then(result => {
             res.redirect(`${res.locals.navLocation}/details/${result.id}`)
         })
+        .catch(err => {
+            if (err instanceof ValidationError) {
+                res.locals.validationErrors = mapValidationErrorsByName(err.errors)
+                return showAddPricebookForm(req, res, next, data)
+            }
+            next(err)
+        })
 }
 
-export const updatePricebook = (req, res) => {
+export const updatePricebook = (req, res, next) => {
     const data = {...req.body}
     const pricebookId = data.id
     PricebookRepository.update(pricebookId, data)
         .then(_ => {
             res.redirect(`${res.locals.navLocation}/details/${pricebookId}`)
+        })
+        .catch(err => {
+            if (err instanceof ValidationError) {
+                res.locals.validationErrors = mapValidationErrorsByName(err.errors)
+                data.id = pricebookId
+                return showEditPricebookForm(req, res, next, data)
+            }
+            next(err)
         })
 }
 

@@ -6,29 +6,45 @@
         <form class="form" novalidate action="<%= formAction %>" method="post">
             <input type="hidden" name="id" value="<%= product.id %>">
             <label for="name">Nazwa: <span class="symbol-required">*</span></label>
-            <input type="text" name="name" id="name" required maxlength="20" placeholder="Od 3 do 20 znaków" value="<%= product.name %>">
-            <span id="errorName" class="errors-text"></span>
+            <input type="text" name="name" id="name" required maxlength="20" placeholder="Od 3 do 20 znaków" value="<%= product.name %>"
+            class="<%= validationErrors.has('name') ? 'error-input' : '' %>"
+            >
+            <span id="errorName" class="errors-text">
+                <%= validationErrors.has('name') ? validationErrors.get('name').message : '' %>
+            </span>
 
             <label for="description">Opis:</label>
-            <textarea name="description" id="description" rows="5" cols="40" ><%= product.description %></textarea>
-            <span id="errorDescription" class="errors-text"></span>
+            <textarea name="description" id="description" rows="5" cols="40"
+            class="<%= validationErrors.has('description') ? 'error-input' : '' %>"
+            ><%= product.description %></textarea>
+            <span id="errorDescription" class="errors-text">
+                <%= validationErrors.has('description') ? validationErrors.get('description').message : '' %>
+            </span>
 
             <label for="imageLink">Link do obrazka: <span class="symbol-required">*</span></label>
-            <input type="text" name="imageLink" id="imageLink" required placeholder="np. https://example.com/image.png" value="<%= product.imageLink %>">
-            <span id="errorImageLink" class="errors-text"></span>
+            <input type="text" name="imageLink" id="imageLink" required placeholder="np. https://example.com/image.png" value="<%= product.imageLink %>"
+            class="<%= validationErrors.has('imageLink') ? 'error-input' : '' %>"
+            >
+            <span id="errorImageLink" class="errors-text">
+                <%= validationErrors.has('imageLink') ? validationErrors.get('imageLink').message : '' %>
+            </span>
 
             <label for="unitOfMeasure">Jednostka miary: <span class="symbol-required">*</span></label>
-            <select name="unitOfMeasureId" id="unitOfMeasure">
-                <% if (!product.unitOfMeasure) { %>
+            <select name="unitOfMeasureId" id="unitOfMeasure"
+            class="<%= validationErrors.has('unitOfMeasureId') ? 'error-input' : '' %>"
+            >
+                <% if (!product.unitOfMeasureId) { %>
                     <option value="" selected>-- Wybierz jednostkę --</option>
                 <% } %>
                 <% for (const unit of units) { %> 
                     <option value="<%= unit.id %>"
-                        <%= (product.unitOfMeasure && unit.id.toString() == product.unitOfMeasure.id) ? 'selected' : '' %>>
+                        <%= (product.unitOfMeasureId && unit.id.toString() === product.unitOfMeasureId) ? 'selected' : '' %>>
                         <%= unit.name %></option>
                 <% } %>
             </select>
-            <span id="errorUnitOfMeasure" class="errors-text"></span>
+            <span id="errorUnitOfMeasure" class="errors-text">
+                <%= validationErrors.has('unitOfMeasureId') ? validationErrors.get('unitOfMeasureId').message : '' %>
+            </span>
 
             <% if (formMode === 'details') { %>
                 <div class="section-buttons">
@@ -37,7 +53,7 @@
             <% } %>
 
             <div class="form-buttons">
-                <p id="errorsSummary" class="errors-text"></p>
+                <p id="errorsSummary" class="errors-text"><%- validationErrors.size > 0 ? 'Formularz zawiera błędy' : '' %></p>
                 <% if (formMode !== 'details') { %>
                     <input type="submit" value="<%=btnLabel%>" class="form-button-submit">
                     <a href="<%= navLocation %>" class="form-button-cancel">Anuluj</a>
@@ -46,7 +62,7 @@
                 <% } %>
             </div>
         </form>
-        <% if ((formMode === 'details' || formMode === 'edit') && product.pricebooks.length > 0) { %>
+        <% if (formMode === 'details' && product.pricebooks?.length > 0) { %>
             <h2>
                 Sklepy w których znajduje się produkt
             </h2>
@@ -66,7 +82,7 @@
                     <% } %>
                 </tbody>
             </table>
-        <% } else if (formMode !== 'create') { %>
+        <% } else if (product.pricebooks?.length > 0 && formMode === 'details') { %>
             <h1>
                 Ten produkt nie został jeszcze dodany do żadnego sklepu!
             </h1>

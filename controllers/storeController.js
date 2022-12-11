@@ -21,9 +21,9 @@ export const showStoreList = (req, res, next) => {
         })
 }
 
-export const showAddStoreForm = (req, res, next) => {
+export const showAddStoreForm = (req, res, next, store = {}) => {
     res.render(viewDir + 'form', {
-        store: {},
+        store,
         pageTitle: 'Nowy sklep',
         formMode: 'create',
         btnLabel: 'Dodaj sklep',
@@ -83,27 +83,34 @@ export const addStore = (req, res, next) => {
         })
         .catch(err => {
             if (err instanceof ValidationError) {
-                return res.render(viewDir + 'form', {
-                    store: data,
-                    pageTitle: 'Dodawanie sklepu',
-                    formMode: 'create',
-                    formAction: `${res.locals.navLocation}/add`,
-                    validationErrors: mapValidationErrorsByName(err.errors),
-                    btnLabel: 'Dodaj sklep'
-                })
+                res.locals.validationErrors = mapValidationErrorsByName(err.errors)
+                return showAddStoreForm(req, res, next, data)
             }
             next(err)
         })
 }
 
-export const updateStore = (req, res, next) => {
+export const updateStore = async (req, res, next) => {
     const storeId = req.body.id
     const data = {...req.body }
     StoreRepository.update(storeId, data)
         .then(_ => {
             res.redirect(`${res.locals.navLocation}/details/${storeId}`)
         })
-        .catch(err => next(err))
+        .catch(err => {
+            if (err instanceof ValidationError) {
+                data.id = storeId
+                return res.render(viewDir + 'form', {
+                    store: data,
+                    pageTitle: 'Edycja sklepu',
+                    formMode: 'edit',
+                    btnLabel: 'Edytuj sklep',
+                    formAction: `${res.locals.navLocation}/edit`,
+                    validationErrors: mapValidationErrorsByName(err.errors)
+                })
+            }
+            next(err)
+        })
 }
 
 export const deleteStore = (req, res, next) => {

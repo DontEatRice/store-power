@@ -11,7 +11,19 @@ export default class DbRepository {
     }
 
     /**
-     * 
+     * Deletes empty attributes changing passed object.
+     * @param {object} body 
+     * @returns {object}
+     */
+    #setEmptyFieldsToNull(body) {
+        for (const field in body) {
+            if (body[field] === '')
+                body[field] = null
+        }
+        return body
+    }
+
+    /**
      * @param {import("sequelize").FindOptions} options 
      */
     getAll(options = {}) {
@@ -44,15 +56,12 @@ export default class DbRepository {
 
     create(body) {
         delete body.id
-        for (const field in body) {
-            if (body[field] === '')
-                delete body[field]
-        }
-        return this.model.create(body)
+        return this.model.create(this.#setEmptyFieldsToNull(body))
     }
 
     update(id, body) {
         delete body.id
+        body = this.#setEmptyFieldsToNull(body)
         return this.model.update(body, {
             where: {
                 id
