@@ -16,7 +16,7 @@ export const showStoreList = (req, res, next) => {
                 stores
             })
         })
-        .then(err => {
+        .catch(err => {
             next(err)
         })
 }
