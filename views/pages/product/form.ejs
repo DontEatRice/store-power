@@ -38,7 +38,7 @@
                 <% } %>
                 <% for (const unit of units) { %> 
                     <option value="<%= unit.id %>"
-                        <%= (product.unitOfMeasureId && unit.id.toString() === product.unitOfMeasureId) ? 'selected' : '' %>>
+                        <%- (product.unitOfMeasureId && unit.id.toString() == product.unitOfMeasureId) ? 'selected' : '' %>>
                         <%= unit.name %></option>
                 <% } %>
             </select>
