@@ -12,8 +12,8 @@ const fillSampleData = async () => {
     let stores, products
     if (storeCount == 0) {
         stores = await Store.bulkCreate([
-            {name: 'Frog Shop', city: 'Warszawa', street: 'al. Marszałkowska 20', email: 'warsaw@frog.shop'},
-            {name: 'Jedzeniomat', city: 'Warszawa', street: 'Koszykowa 85B', email: 'koszykowa@jedzeniomat.net'}
+            {name: 'Frog Shop', city: 'Warszawa', street: 'al. Marszałkowska 20', email: 'warsaw@frog.shop', password: '12345'},
+            {name: 'Jedzeniomat', city: 'Warszawa', street: 'Koszykowa 85B', email: 'koszykowa@jedzeniomat.net', password: 'admin'}
         ])
     }
     if (productCount == 0 && unitsCount == 0) {

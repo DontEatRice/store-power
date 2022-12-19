@@ -48,7 +48,7 @@ function validateForm(event) {
         valid = false;
         priceInput.classList.add('error-input');
         errorPrice.textContent = REQUIRED_FIELD_ERR_MESSAGE
-    } else if (!checkNumberRange(priceInput.value, 0.00001, Number.MAX_SAFE_INTEGER)) {
+    } else if (!checkNumberRange(priceInput.value, 0.01, 99999.99)) {
         valid = false;
         priceInput.classList.add('error-input')
         errorPrice.textContent = 'Cena powinna być większa od 0'

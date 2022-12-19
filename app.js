@@ -15,6 +15,7 @@ import storeApiRouter from './routes/api/storeApiRoute.js';
 import productApiRouter from './routes/api/productApiRoute.js';
 import pricebookApiRouter from './routes/api/pricebookApiRoute.js';
 import unitOfMeasureApiRouter from './routes/api/unitOfMeasureApiRoute.js';
+import session from 'express-session';
 
 const app = express();
 const __dirname = dirname(fileURLToPath(import.meta.url)) 
@@ -28,6 +29,10 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(join(__dirname, 'public')));
+app.use(session({
+  secret: 'secret_password',
+  resave: false
+}))
 
 app.use((req, res, next) => {
   const paths = req.path.split('/')

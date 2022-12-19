@@ -20,6 +20,12 @@ class StoreRepository extends DbRepository {
             }]
         })
     }
+
+    getByEmail(email) {
+        this.model.findOne({
+            where: {email}
+        })
+    }
 }
 
 export default new StoreRepository()

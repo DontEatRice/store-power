@@ -69,6 +69,7 @@ const Store = sequalize.define('Stores', {
     },
     email: {
         type: DataTypes.STRING(50),
+        allowNull: false,
         validate: {
             isEmail: {
                 msg: 'Podany adres e-mail nie jest prawidłowy.'
@@ -76,8 +77,15 @@ const Store = sequalize.define('Stores', {
             len: {
                 args: [0, 50],
                 msg: 'Pole powinno zawierać maksymalnie 50 znaków!'
+            },
+            notNull: {
+                msg: NOT_NULL_MESSAGE
             }
         }
+    },
+    password: {
+        type: DataTypes.STRING,
+        allowNull: false
     }
 })
 
