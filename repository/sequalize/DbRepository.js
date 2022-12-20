@@ -45,7 +45,7 @@ export default class DbRepository {
      * @param {import("sequelize").FindOptions} options 
      */
     getByIds(ids, options = {}) {
-        const optionsCopy = {...options}
+        const optionsCopy = { ...options }
         optionsCopy.where = {
             id: {
                 [Op.in]: ids
@@ -60,8 +60,10 @@ export default class DbRepository {
     }
 
     update(id, body) {
+        console.log(body)
         delete body.id
         body = this.#setEmptyFieldsToNull(body)
+        console.log(body)
         return this.model.update(body, {
             where: {
                 id

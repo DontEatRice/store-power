@@ -16,9 +16,10 @@ import productApiRouter from './routes/api/productApiRoute.js';
 import pricebookApiRouter from './routes/api/pricebookApiRoute.js';
 import unitOfMeasureApiRouter from './routes/api/unitOfMeasureApiRoute.js';
 import session from 'express-session';
+import { onlyAuthUserMiddleware } from './controllers/authController.js';
 
 const app = express();
-const __dirname = dirname(fileURLToPath(import.meta.url)) 
+const __dirname = dirname(fileURLToPath(import.meta.url))
 
 // view engine setup
 app.set('views', join(__dirname, 'views'));
@@ -56,13 +57,17 @@ app.use((req, res, next) => {
         .join('-')
     return date
   }
+  res.locals.loggedUser = req.session.loggedUser
+  if (!res.locals.loginError) {
+    res.locals.loginError = undefined
+  }
   next()
 })
 
 app.use('/', indexRouter);
 app.use('/stores', storeRouter);
 app.use('/products', productRouter);
-app.use('/pricebooks', pricebookRouter)
+app.use('/pricebooks', onlyAuthUserMiddleware, pricebookRouter)
 app.use('/units', unitRouter)
 // api endpoints
 app.use('/api/stores', storeApiRouter)
@@ -72,12 +77,12 @@ app.use('/api/units', unitOfMeasureApiRouter)
 
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   next(createError(404));
 });
 
 // error handler
-app.use(function(err, req, res, next) {
+app.use(function (err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};

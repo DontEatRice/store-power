@@ -85,7 +85,12 @@ const Store = sequalize.define('Stores', {
     },
     password: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: false,
+        validate: {
+            notNull: {
+                msg: NOT_NULL_MESSAGE
+            }
+        }
     }
 })
 

@@ -20,5 +20,11 @@
             <li><a href="/stores" class="<%- navLocation === '/stores' ? 'active' : '' %>">Sklepy</a></li>
             <li><a href="/pricebooks" class="<%- navLocation === '/pricebooks' ? 'active' : '' %>">Ceny produktów w sklepach</a></li>
             <li><a href="/products" class="<%- navLocation === '/products' ? 'active' : '' %>">Produkty</a></li>
+            <% if (!loggedUser) { %>
+            <li class="flex-end"><a href="/login">Zaloguj</a></li>
+            <% } else { %>
+            <li class="flex-end"><a href="/logout">Wyloguj</a></li>
+            <li><a href="/login" class="<%- navLocation === '/login' ? 'active' : '' %>">Moje konto</a></li>
+            <% } %>
         </ul>
     </nav>

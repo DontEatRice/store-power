@@ -1,0 +1,24 @@
+<%- include('./fragments/header.ejs') %>
+    <main>
+        <h2>Logowanie</h2>
+        <% if (!loggedUser) { %>
+            <div id="login">
+                <form action="/login" class="form" method="post" novalidate>
+                    <label for="loginEmail">Email:</label>
+                    <input type="email" name="email" id="loginEmail">
+                    <span></span>
+
+                    <label for="loginPassword">Hasło:</label>
+                    <input type="password" name="password" id="loginPassword">
+                    <span></span>
+
+                    <input type="submit" value="Zaloguj się" class="form-button-submit">
+                    <span id="loginErrors" class="errors-text"><%= loginError ? loginError : '' %></span>
+                </form>
+            </div>
+        <% } else { %>
+            <span>Jesteś zalogowany jako <b><%=loggedUser.name%></b> (<%=loggedUser.email%>)</span>
+            <a href="/logout">Wyloguj się</a>
+        <% } %>
+    </main>
+<%- include('./fragments/footer.ejs') %>

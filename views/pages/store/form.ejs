@@ -45,6 +45,16 @@
                 <%= validationErrors.has('email') ? validationErrors.get('email').message : '' %>
             </span>
 
+            <% if (formMode === 'edit' || formMode === 'create') { %>
+            <label for="password">Hasło:</label>
+            <input type="password" name="password" id="password" placeholder=""
+            class="<%= validationErrors.has('password') ? 'error-input' : '' %>"
+            >
+            <span id="errorPassword" class="errors-text">
+                <%= validationErrors.has('password') ? validationErrors.get('password').message : '' %>
+            </span>
+            <% } %>
+
             <% if (formMode === 'details') { %>
                 <div class="section-buttons">
                     <a href="<%= navLocation %>/edit/<%=store.id%>" class="list-actions-button-edit">Edytuj</a>
