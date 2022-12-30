@@ -11,20 +11,20 @@
 </head>
 <body>
     <header>
-        <h1>Zarządzanie sklepami i cenami produktów StorePower</h1>
+        <h1><%= __('header-title') %></h1>
         <img src="/images/logo-placeholder.png" alt="StorePower logo">
     </header>
     <nav>
         <ul>
-            <li><a href="/" class="<%- navLocation === '/' ? 'active' : '' %>">Strona główna</a></li>
-            <li><a href="/stores" class="<%- navLocation === '/stores' ? 'active' : '' %>">Sklepy</a></li>
-            <li><a href="/pricebooks" class="<%- navLocation === '/pricebooks' ? 'active' : '' %>">Ceny produktów w sklepach</a></li>
-            <li><a href="/products" class="<%- navLocation === '/products' ? 'active' : '' %>">Produkty</a></li>
+            <li><a href="/" class="<%- navLocation === '/' ? 'active' : '' %>"><%= __('nav.main-page') %></a></li>
+            <li><a href="/stores" class="<%- navLocation === '/stores' ? 'active' : '' %>"><%= __('nav.stores') %></a></li>
+            <li><a href="/pricebooks" class="<%- navLocation === '/pricebooks' ? 'active' : '' %>"><%= __('nav.pricebooks') %></a></li>
+            <li><a href="/products" class="<%- navLocation === '/products' ? 'active' : '' %>"><%= __('nav.products') %></a></li>
             <% if (!loggedUser) { %>
-            <li class="flex-end"><a href="/login">Zaloguj</a></li>
+            <li class="flex-end"><a href="/login"><%= __('nav.login') %></a></li>
             <% } else { %>
-            <li class="flex-end"><a href="/logout">Wyloguj</a></li>
-            <li><a href="/login" class="<%- navLocation === '/login' ? 'active' : '' %>">Moje konto</a></li>
+            <li class="flex-end"><a href="/logout"><%= __('nav.logout') %></a></li>
+            <li><a href="/login" class="<%- navLocation === '/login' ? 'active' : '' %>"><%= __('nav.my-account') %></a></li>
             <% } %>
         </ul>
     </nav>

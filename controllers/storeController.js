@@ -52,7 +52,7 @@ export const showEditStoreForm = (req, res) => {
         })
         .catch(err => next(err))
 }
- 
+
 export const showStoreDetails = (req, res, next) => {
     const storeId = req.params.storeId
     StoreRepository.getById(storeId)
@@ -92,7 +92,7 @@ export const addStore = (req, res, next) => {
 
 export const updateStore = async (req, res, next) => {
     const storeId = req.body.id
-    const data = {...req.body }
+    const data = { ...req.body }
     StoreRepository.update(storeId, data)
         .then(_ => {
             res.redirect(`${res.locals.navLocation}/details/${storeId}`)

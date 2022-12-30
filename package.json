@@ -1,6 +1,11 @@
 {
-  "name": "tin-ceny-produktow-sikorski-s22518",
-  "version": "0.0.0",
+  "name": "store-power",
+  "version": "0.0.1",
+  "author": {
+    "email": "jakub.sikorski0211@gmail.com",
+    "name": "Jakub Sikorski",
+    "url": "https://www.linkedin.com/in/jakub-sikorski-2629ab236/"
+  },
   "type": "module",
   "private": true,
   "scripts": {
@@ -18,6 +23,7 @@
     "express": "^4.18.2",
     "express-session": "^1.17.3",
     "http-errors": "~1.6.3",
+    "i18n": "^0.15.1",
     "morgan": "~1.9.1",
     "mysql2": "^2.3.3",
     "sequelize": "^6.25.6"

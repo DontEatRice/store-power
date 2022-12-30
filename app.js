@@ -1,6 +1,6 @@
 import createError from 'http-errors';
 import express from 'express';
-import { dirname, join } from 'path';
+import path, { dirname, join } from 'path';
 import cookieParser from 'cookie-parser';
 import logger from 'morgan';
 import { fileURLToPath } from 'url';
@@ -17,6 +17,7 @@ import pricebookApiRouter from './routes/api/pricebookApiRoute.js';
 import unitOfMeasureApiRouter from './routes/api/unitOfMeasureApiRoute.js';
 import session from 'express-session';
 import { onlyAuthUserMiddleware } from './controllers/authController.js';
+import { I18n } from 'i18n';
 
 const app = express();
 const __dirname = dirname(fileURLToPath(import.meta.url))
@@ -25,11 +26,20 @@ const __dirname = dirname(fileURLToPath(import.meta.url))
 app.set('views', join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
+const i18n = new I18n()
+i18n.configure({
+  locales: ['pl', 'en'],
+  directory: path.join(__dirname, 'locales'),
+  objectNotation: true,
+  cookie: 'pma_lang'
+})
+
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(join(__dirname, 'public')));
+app.use(i18n.init)
+
 app.use(session({
   secret: 'secret_password',
   resave: false
@@ -38,6 +48,7 @@ app.use(session({
 app.use((req, res, next) => {
   const paths = req.path.split('/')
   res.locals.validationErrors = new Map()
+  res.locals.path = encodeURIComponent(req.path)
   res.locals.navLocation = '/' + paths[1]
   /**
    * @param {string | Date | undefined} date 
@@ -61,8 +72,13 @@ app.use((req, res, next) => {
   if (!res.locals.loginError) {
     res.locals.loginError = undefined
   }
+  if (!res.locals.lang) {
+    res.locals.lang = req.cookies['pma_lang']
+  }
+
   next()
 })
+app.use(express.static(join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/stores', storeRouter);

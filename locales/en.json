@@ -1,0 +1,24 @@
+{
+    "main-page": {
+        "h1": "Home page",
+        "p": "Manage your stores and products! Edit price of a product in a given shop quickly, add new products, edit old ones, WOW!"
+    },
+    "header-title": "Stores and pricebooks managment StorePower",
+    "nav": {
+        "main-page": "Home",
+        "stores": "Stores",
+        "pricebooks": "Pricebooks",
+        "products": "Products",
+        "login": "Log in",
+        "logout": "Log out",
+        "my-account": "My account"
+    },
+    "list-page": {
+        "actions": {
+            "title": "Actions",
+            "details": "details",
+            "edit": "edit",
+            "delete": "delete"
+        }
+    }
+}

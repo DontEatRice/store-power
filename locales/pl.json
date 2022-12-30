@@ -1,0 +1,24 @@
+{
+    "main-page": {
+        "h1": "Strona główna",
+        "p": "Zarządzaj swoimi sklepami i produktami! Szybko edytuj cenę produktu w sklepie, dodawaj nowe produkty, edytuj stare, WOW!"
+    },
+    "nav": {
+        "main-page": "Strona główna",
+        "stores": "Sklepy",
+        "pricebooks": "Ceny produktów w sklepach",
+        "products": "Produkty",
+        "login": "Zaloguj się",
+        "logout": "Wyloguj",
+        "my-account": "Moje konto"
+    },
+    "list-page": {
+        "actions": {
+            "title": "Akcje",
+            "details": "Szczegóły",
+            "edit": "Edytuj",
+            "delete": "Usuń"
+        }
+    },
+    "header-title": "Zarządzanie sklepami i cenami produktów StorePower"
+}
