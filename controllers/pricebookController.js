@@ -123,7 +123,7 @@ export const showPricebookDetails = (req, res, next) => {
 }
 
 export const addPricebook = (req, res, next) => {
-    const data = {...req.body};
+    const data = { ...req.body };
     PricebookRepository.create(data)
         .then(result => {
             res.redirect(`${res.locals.navLocation}/details/${result.id}`)
@@ -138,7 +138,7 @@ export const addPricebook = (req, res, next) => {
 }
 
 export const updatePricebook = (req, res, next) => {
-    const data = {...req.body}
+    const data = { ...req.body }
     const pricebookId = data.id
     PricebookRepository.update(pricebookId, data)
         .then(_ => {

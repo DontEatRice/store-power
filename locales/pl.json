@@ -20,5 +20,39 @@
             "delete": "Usuń"
         }
     },
-    "header-title": "Zarządzanie sklepami i cenami produktów StorePower"
+    "header-title": "Zarządzanie sklepami i cenami produktów StorePower",
+    "form-page": {
+        "actions": {
+            "return": "Powrót",
+            "edit": "Edytuj",
+            "cancel": "Anuluj"
+        }
+    },
+    "store": {
+        "fields": {
+            "name": "Nazwa",
+            "city": "Miejscowość",
+            "street": "Ulica i numer",
+            "phoneNumber": "Numer telefonu",
+            "email": "Adres e-mail",
+            "password": "Hasło"
+        },
+        "list": {
+            "title": "Sklepy",
+            "pageTitle": "Lista sklepów",
+            "addNew": "Dodaj nowy sklep",
+            "noData": "Nie znaleziono żadnego sklepu"
+        },
+        "form": {
+            "pricebooks": "Ceny produktów",
+            "add": {
+                "pageTitle": "Dodawanie nowego sklepu",
+                "btnLabel": "Dodaj nowy sklep"
+            },
+            "edit": {
+                "pageTitle": "Edytowanie sklepu",
+                "btnLabel": "Zapisz zmiany"
+            }
+        }
+    }
 }

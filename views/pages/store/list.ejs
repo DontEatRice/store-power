@@ -1,13 +1,13 @@
 <%- include('../../fragments/header.ejs') %>
     <main>
-        <h2>Lista sklepów</h2>
+        <h2><%= __('store.list.pageTitle') %></h2>
         <table class="table-list">
             <thead>
                 <tr>
-                    <th>Nazwa</th>
-                    <th>Miejscowość</th>
-                    <th>Ulica</th>
-                    <th>Akcje</th>
+                    <th><%= __('store.fields.name') %></th>
+                    <th><%= __('store.fields.city') %></th>
+                    <th><%= __('store.fields.street') %></th>
+                    <th><%= __('list-page.actions.title') %></th>
                 </tr>
             </thead>
             <tbody>
@@ -27,6 +27,6 @@
                 <% } %>                  
             </tbody>
         </table>
-        <p><a href="<%= navLocation %>/add" class="button-add">Dodaj nowy sklep</a></p>
+        <p><a href="<%= navLocation %>/add" class="button-add"><%= __('store.list.addNew') %></a></p>
     </main>
     <%- include('../../fragments/footer.ejs') %>

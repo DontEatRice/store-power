@@ -16,6 +16,7 @@ export const login = async (req, res, next) => {
             })
         }
         if (await comparePasswords(password, store.password)) {
+            delete store.password
             req.session.loggedUser = store
             return res.redirect('/')
         }

@@ -24,7 +24,7 @@ export const showStoreList = (req, res, next) => {
 export const showAddStoreForm = (req, res, next, store = {}) => {
     res.render(viewDir + 'form', {
         store,
-        pageTitle: 'Nowy sklep',
+        pageTitle: req.__('store.form.add.pageTitle'),
         formMode: 'create',
         btnLabel: 'Dodaj sklep',
         formAction: `${res.locals.navLocation}/add`,

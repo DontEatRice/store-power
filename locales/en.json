@@ -20,5 +20,42 @@
             "edit": "edit",
             "delete": "delete"
         }
+    },
+    "form-page": {
+        "actions": {
+            "return": "Go back",
+            "edit": "Edit",
+            "cancel": "Cancel"
+        }
+    },
+    "store": {
+        "fields": {
+            "name": "Name",
+            "city": "City",
+            "street": "Street and number",
+            "phoneNumber": "Phone",
+            "email": "E-mail address",
+            "password": "Password"
+        },
+        "list": {
+            "title": "Stores",
+            "pageTitle": "List of stores",
+            "addNew": "Add new store",
+            "noData": "No stores were found in the database"
+        },
+        "form": {
+            "pricebooks": "Pricebooks",
+            "details": {
+                "pageTitle": "Store details"
+            },
+            "add": {
+                "pageTitle": "Adding new store",
+                "btnLabel": "Add new store"
+            },
+            "edit": {
+                "pageTitle": "Editing store",
+                "btnLabel": "Save changes"
+            }
+        }
     }
 }
