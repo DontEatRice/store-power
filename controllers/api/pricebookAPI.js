@@ -1,4 +1,5 @@
 import PricebookRepository from "../../repository/sequalize/PricebookRepository.js"
+import { handleApiError } from "../utils.js"
 
 export const getPricebooks = (req, res, next) => {
     PricebookRepository.getAll()
@@ -33,10 +34,7 @@ export const createPricebook = (req, res, next) => {
         .then(pricebook => {
             res.status(201).json(pricebook)
         })
-        .catch(err => {
-            err.statusCode = 501
-            next(err)
-        })
+        .catch(err => handleApiError(err, res))
 }
 
 export const updatePricebook = (req, res, next) => {
@@ -48,10 +46,7 @@ export const updatePricebook = (req, res, next) => {
                 rowCount: result
             })
         })
-        .catch(err => {
-            err.statusCode == 500
-            next(err)
-        })
+        .catch(err => handleApiError(err, res))
 }
 
 export const deletePricebook = (req, res, next) => {

@@ -18,6 +18,7 @@ import unitOfMeasureApiRouter from './routes/api/unitOfMeasureApiRoute.js';
 import session from 'express-session';
 import { onlyAuthUserMiddleware } from './controllers/authController.js';
 import { I18n } from 'i18n';
+import cors from 'cors'
 
 const app = express();
 const __dirname = dirname(fileURLToPath(import.meta.url))
@@ -34,6 +35,7 @@ i18n.configure({
   cookie: 'pma_lang'
 })
 
+app.use(cors())
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));

@@ -1,4 +1,5 @@
 import UnitOfMeasureRepository from "../../repository/sequalize/UnitOfMeasureRepository.js"
+import { handleApiError } from "../utils.js"
 
 export const getUnitOfMeasures = (req, res, next) => {
     UnitOfMeasureRepository.getAll()
@@ -33,10 +34,7 @@ export const createUnitOfMeasure = (req, res, next) => {
         .then(unit => {
             res.status(201).json(unit)
         })
-        .catch(err => {
-            err.statusCode = 501
-            next(err)
-        })
+        .catch(err => handleApiError(err, res))
 }
 
 export const updateUnitOfMeasure = (req, res, next) => {
@@ -48,10 +46,7 @@ export const updateUnitOfMeasure = (req, res, next) => {
                 rowCount: result
             })
         })
-        .catch(err => {
-            err.statusCode == 500
-            next(err)
-        })
+        .catch(err => handleApiError(err, res))
 }
 
 export const deleteUnitOfMeasure = (req, res, next) => {

@@ -1,5 +1,5 @@
 import bcrypt from "bcryptjs";
-import { ValidationErrorItem } from "sequelize";
+import { ValidationError, ValidationErrorItem } from "sequelize";
 
 /**
  * @param {ValidationErrorItem[]} errors
@@ -11,6 +11,22 @@ export const mapValidationErrorsByName = (errors) => {
         map.set(error.path, error)
     })
     return map;
+}
+
+/** 
+ * @param {any} error
+ * @param {import("express").Response} res
+ * @returns {void}
+ */
+export const handleApiError = (error, res) => {
+    if (error instanceof ValidationError) {
+        const errors = Object.fromEntries(mapValidationErrorsByName(error.errors))
+        return res.status(400).json({
+            validationErrors: errors
+        })
+    }
+    error.statusCode = 500
+    res.status(500).json(error)
 }
 
 const salt = bcrypt.genSaltSync(8)

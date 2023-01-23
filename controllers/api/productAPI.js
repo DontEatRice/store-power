@@ -1,4 +1,5 @@
 import ProductRepository from "../../repository/sequalize/ProductRepository.js"
+import { handleApiError } from "../utils.js"
 
 /**
  * @param {import("express").Request} req 
@@ -27,8 +28,7 @@ export const getProductById = async (req, res) => {
             res.json(product)
         }
     } catch (err) {
-        console.error(err)
-        res.status(501).send('internal server error!')
+        res.status(500).json(err)
     }
 }
 
@@ -41,10 +41,7 @@ export const createProduct = (req, res, next) => {
         .then(product => {
             res.status(201).json(product)
         })
-        .catch(err => {
-            err.statusCode = 501
-            next(err)
-        })
+        .catch(err => handleApiError(err, res))
 }
 
 export const updateProduct = (req, res, next) => {
@@ -56,10 +53,7 @@ export const updateProduct = (req, res, next) => {
                 rowCount: result
             })
         })
-        .catch(err => {
-            err.statusCode == 500
-            next(err)
-        })
+        .catch(err => handleApiError(err, res))
 }
 
 export const deleteProduct = (req, res, next) => {

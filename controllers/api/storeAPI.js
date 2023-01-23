@@ -1,4 +1,6 @@
+import { ValidationError } from "sequelize"
 import StoreRepository from "../../repository/sequalize/StoreRepository.js"
+import { handleApiError, mapValidationErrorsByName } from "../utils.js"
 
 /**
  * @param {import("express").Request} req 
@@ -8,9 +10,8 @@ export const getStores = async (req, res, next) => {
     try {
         res.json(await StoreRepository.getAll())
     } catch (err) {
-        console.error(err)
         err.statusCode = 500
-        next(err)
+        res.status(500).json(err)
     }
 }
 
@@ -23,7 +24,7 @@ export const getStoreById = async (req, res) => {
                 message: `Store with id: ${storeId} not found`
             })
         } else {
-            res.json(store)
+            res.status(200).json(store)
         }
     } catch (err) {
         console.error(err)
@@ -40,10 +41,7 @@ export const createStore = (req, res, next) => {
         .then(store => {
             res.status(201).json(store)
         })
-        .catch(err => {
-            err.statusCode = 501
-            next(err)
-        })
+        .catch(err => handleApiError(err, res))
 }
 
 export const updateStore = (req, res, next) => {
@@ -55,10 +53,7 @@ export const updateStore = (req, res, next) => {
                 rowCount: result
             })
         })
-        .catch(err => {
-            err.statusCode == 500
-            next(err)
-        })
+        .catch(err => handleApiError(err, res))
 }
 
 export const deleteStore = (req, res, next) => {
@@ -70,8 +65,5 @@ export const deleteStore = (req, res, next) => {
                 rowCount: result
             })
         })
-        .catch(err => {
-            err.statusCode = 500
-            next(err)
-        })
+        .catch(err => handleApiError(err, res))
 }
