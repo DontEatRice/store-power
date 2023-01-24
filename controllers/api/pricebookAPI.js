@@ -1,8 +1,23 @@
+import Product from "../../model/sequalize/Product.js"
+import Store from "../../model/sequalize/Store.js"
 import PricebookRepository from "../../repository/sequalize/PricebookRepository.js"
 import { handleApiError } from "../utils.js"
 
 export const getPricebooks = (req, res, next) => {
-    PricebookRepository.getAll()
+    PricebookRepository.getAll({
+        include: [
+            {
+                model: Product,
+                as: 'product',
+                attributes: ['name']
+            },
+            {
+                model: Store,
+                as: 'store',
+                attributes: ['name']
+            }
+        ]
+    })
         .then(pricebooks => {
             res.json(pricebooks)
         })
