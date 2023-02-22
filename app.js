@@ -1,11 +1,11 @@
+import * as dotenv from 'dotenv'
+dotenv.config()
 import createError from 'http-errors';
 import express from 'express';
 import path, { dirname, join } from 'path';
 import cookieParser from 'cookie-parser';
 import logger from 'morgan';
 import { fileURLToPath } from 'url';
-
-//TODO stworzyć jakiś jeden plik w routes/ który będzie exportował to wszystko na raz
 import indexRouter from './routes/index.js';
 import storeRouter from './routes/storeRoute.js'
 import productRouter from './routes/productRoute.js';
@@ -15,6 +15,7 @@ import storeApiRouter from './routes/api/storeApiRoute.js';
 import productApiRouter from './routes/api/productApiRoute.js';
 import pricebookApiRouter from './routes/api/pricebookApiRoute.js';
 import unitOfMeasureApiRouter from './routes/api/unitOfMeasureApiRoute.js';
+import authApiRouter from './routes/api/authApiRoute.js';
 import session from 'express-session';
 import { onlyAuthUserMiddleware } from './controllers/authController.js';
 import { I18n } from 'i18n';
@@ -43,7 +44,7 @@ app.use(cookieParser());
 app.use(i18n.init)
 
 app.use(session({
-  secret: 'secret_password',
+  secret: process.env.SESSION_SECRET,
   resave: false
 }))
 
@@ -92,6 +93,7 @@ app.use('/api/stores', storeApiRouter)
 app.use('/api/products', productApiRouter)
 app.use('/api/pricebooks', pricebookApiRouter)
 app.use('/api/units', unitOfMeasureApiRouter)
+app.use('/api/auth', authApiRouter)
 
 
 // catch 404 and forward to error handler

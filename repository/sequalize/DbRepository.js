@@ -60,10 +60,8 @@ export default class DbRepository {
     }
 
     update(id, body) {
-        console.log(body)
         delete body.id
         body = this.#setEmptyFieldsToNull(body)
-        console.log(body)
         return this.model.update(body, {
             where: {
                 id
